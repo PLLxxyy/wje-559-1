@@ -102,6 +102,14 @@ export class ComplaintsService {
     return this.logs.find({ where: { complaintId: id }, order: { createdAt: 'ASC' } });
   }
 
+  async rate(user: RequestUser, id: number, rating: number, ratingComment?: string) {
+    const complaint = await this.detail(user, id);
+    if (complaint.reporterId !== user.id) throw new ForbiddenException('Can only rate own complaint');
+    complaint.rating = rating;
+    complaint.ratingComment = ratingComment ?? null;
+    return this.complaints.save(complaint);
+  }
+
   private async transition(user: RequestUser, id: number, toStatus: TicketStatus, comment: string, patch: Partial<Complaint> = {}) {
     const complaint = await this.detail(user, id);
     if (!ALLOWED_TRANSITIONS[complaint.status].includes(toStatus)) {

@@ -59,6 +59,12 @@ export class Complaint {
   @Column({ type: 'timestamp', nullable: true })
   closedAt: Date | null;
 
+  @Column({ type: 'int', nullable: true })
+  rating: number | null;
+
+  @Column({ type: 'text', nullable: true })
+  ratingComment: string | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

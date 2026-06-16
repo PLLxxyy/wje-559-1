@@ -78,4 +78,10 @@ export class ComplaintsController {
   async logs(@Req() req: RequestWithUser, @Param('id') id: string) {
     return ok(await this.complaintsService.listLogs(req.user, Number(id)));
   }
+
+  @Roles(UserRole.RESIDENT)
+  @Post(':id/rate')
+  async rate(@Req() req: RequestWithUser, @Param('id') id: string, @Body() body: any) {
+    return ok(await this.complaintsService.rate(req.user, Number(id), body.rating, body.ratingComment));
+  }
 }
